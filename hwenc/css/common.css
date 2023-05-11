@@ -1,0 +1,18 @@
+body {
+  font-size: 40px;
+  color: #07c2a3;
+  font-family: "DOSPilgiMedium", "Noto Sans KR";
+  /*폰트 두개쓸때 두번째거는 첫번째개 적용안될때, 한글폰트는 대부분 영어폰트포함이라 영문 폰트먼저 써야함*/
+  font-weight: 400;
+  /*몇 몇 태그들은 부모의속성을 물려받지않는 것들도 있다 대표적으로 a태그*/
+  /*키   :  벨류*/
+  /*자바의 상속개념
+  부모의 속성을 자식이 그대로 내려받음 
+*/
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  /*inherit 상속*/
+}
