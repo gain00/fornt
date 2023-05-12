@@ -1,0 +1,90 @@
+.header {
+  position: absolute;
+  width: 100%;
+  height: 100px;
+
+  overflow: hidden; /*overflow 요소의 내용이 요소를 벗어났을때를 처리함 */
+  z-index: 99;
+  transition: all 0.25s ease;
+}
+.header:hover .list .depth01 {
+  /* 편법 */
+
+  color: #000;
+  transition: all 0.5s ease;
+}
+.header:hover .list .depth02 {
+  /* 편법 */
+
+  color: #999;
+  transition: all 0.5s ease;
+}
+.header .list .depth02 a:hover {
+  /* 헤더클래스 안에 리스트클래스 안에 뎊트02클래스 안에 a에 커서를 올렸을때 */
+
+  color: #000;
+  transition: all 0.5s ease;
+}
+.header:hover {
+  /* 편법 */
+  height: 350px;
+  background-color: rgba(255, 255, 255, 1);
+  /* content: url(../images/layout/logo_active.png); */
+  /*transition 천천히바뀌게 천천히내려오는효과  */
+}
+/* .header:hover .logo {
+  content: url(../images/layout/logo_active.png);
+ 보류 
+} */
+.header::after {
+  content: "";
+  /* content after쓸때 무조건 표시 */
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: #999;
+  position: absolute;
+  top: 100px;
+}
+.logo {
+  position: absolute;
+  height: 100px;
+  display: flex;
+  /* flex로 컨테이너 설정 */
+  align-items: center;
+  /* align-tiems: center로 수직가운데정렬 */
+  padding-right: 50px;
+  padding-left: 50px;
+
+  /*여백처리
+    패딩 내영역자체가 넓어짐
+    마진 a태그의경우 링크영역이 줄어듬
+    */
+}
+
+.list {
+  display: flex;
+  justify-content: center;
+}
+
+.list .depth01 {
+  font-size: 20px;
+  font-weight: 100;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.list .depth02 {
+  text-align: center;
+}
+.list .depth02 li {
+  display: flex;
+  /* height: 50px; */
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
