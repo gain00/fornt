@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .parent {
+        width: 1200px;
+        height: 800px;
+        border: 1px solid #f00;
+        margin-top: 200px;
+        margin-left: 200px;
+        position: absolute;
+      }
+      .son {
+        width: 400px;
+        height: 300px;
+        border: 1px solid #000;
+      }
+      .inner-son {
+        width: 200px;
+        height: 100px;
+        border: 1px solid #000;
+        /* 부모 자식은 한덩어리 */
+      }
+      .red {
+        right: 0;
+        top: -300px;
+        background-color: #f00;
+        position: absolute;
+        /* 엡솔루트는 부모한테 포지션이 없다면 화면이 기준점  부모한테 포지션이 있다면 부모가 기준점*/
+      }
+      .blue {
+        background-color: #00f;
+        height: 500px;
+        position: fixed;
+        left: 50px;
+        top: 50px;
+        /* 둘다 포지션이 있으면 굳이 z인덱스를 안줘도 아래쪽에 있는게 위에껄덮는다 */
+        /* absoulte 기준점에서 레프트라이트값 적용 relative 무조건 지가 있던 위치에서 레프트라이트값적요요 */
+        /* fixed -> 화면 가장 왼쪽위 시작점이 기준 되서 고정됨*/
+      }
+      .green {
+        background-color: #0f0;
+        position: sticky;
+        /* 
+        sticky 부모가 스크롤에 걸리는 기점으로 fixed로 전환 부모가 완전히 사라지면 같이 사라짐 
+        이때 부모는 반드시 높이를 가져야 한다.
+        그리고 부모요소에 overflow가 들어가 있으면 안된다.
+        */
+        left: 0;
+        top: 0;
+
+        /* z인덱스는 부모만 기준으로 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="parent">
+      <div class="son red">
+        <div class="inner-son green"></div>
+      </div>
+      <div class="son blue"></div>
+    </div>
+  </body>
+</html>

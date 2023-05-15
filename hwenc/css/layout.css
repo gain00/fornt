@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
 position 
 flex
@@ -5,7 +6,10 @@ ul{} -> ul태그는 중복이 많아서 잘사용하지않음
 따라서 이름을 부여
 */
 .header {
-  position: absolute; /*절대적인위치 보통 팝업에 사용 틀을 무시함  */
+  position: fixed;
+  /*엡솔루트절대적인위치 보통 팝업에 사용 틀을 무시함 
+  fixed 바디기준 
+  */
   width: 100%;
   height: 100px;
   background-color: rgba(255, 255, 255, 0.5);
@@ -13,16 +17,9 @@ ul{} -> ul태그는 중복이 많아서 잘사용하지않음
   z-index: 99;
   transition: all 0.25s ease;
 }
-
-.list > li:hover .depth01 {
-  /* >딱한단계만 내려감 바로밑에있는li만 적용되고 그아래아래있는li에는 적용안됨 */
-  color: #f60;
-}
-
 .header:after {
   /* .css에서 .은 클래스 선택자 */
   /* header가 끝나는 지점에 생성 */
-
   content: "";
   /* content after쓸때 무조건 표시 */
   display: block;
@@ -31,19 +28,25 @@ ul{} -> ul태그는 중복이 많아서 잘사용하지않음
   background-color: #ccc;
   position: absolute;
   top: 100px;
+  /*z-index는 반드시 본인이 포지션을 가지고있어야한다  */
+  /* pseudo element 가상의 엘리먼트 - 빈 div같은걸 따로 생성하기보다 after로 가상의 요소를 하나만들어서 사용 */
 }
-
+.header:hover {
+  height: 350px;
+  background-color: rgb(255, 255, 255);
+  /* 편법 */
+  /*transition 천천히바뀌게 천천히내려오는효과  */
+}
 .header:hover .list {
   /* 편법 */
   color: #111;
 }
-.header:hover {
-  /* 편법 */
-  height: 350px;
-  background-color: rgba(255, 255, 255, 1);
-  /*transition 천천히바뀌게 천천히내려오는효과  */
+.header:hover .logo a .black {
+  opacity: 1;
 }
-
+.header:hover .logo a .white {
+  opacity: 0;
+}
 .header .logo {
   position: absolute;
   height: 100px;
@@ -53,7 +56,6 @@ ul{} -> ul태그는 중복이 많아서 잘사용하지않음
   padding-right: 50px;
   padding-left: 50px;
 }
-
 .header .logo a .white {
   position: absolute;
   transition: all 0.25s ease;
@@ -63,25 +65,16 @@ ul{} -> ul태그는 중복이 많아서 잘사용하지않음
   transition: all 0.25s ease;
   /* opacity 투명도 */
 }
-.header:hover .logo a .black {
-  opacity: 1;
-}
-.header:hover .logo a .white {
-  opacity: 0;
-}
 
-.list {
+.gnb .list {
   display: flex; /*가로정렬*/
   justify-content: center; /*cross-axis 축결정 start/center/end space-between,around펼치기*/
   /*.logo -> hl class logo를 의미 한칸 띄우면 자식*/
-  color: #000000;
+  color: #fff;
 }
-
-.business .list {
-  color: #111;
-}
-
-.list .depth01 {
+.gnb .list li .depth01 {
+  position: relative;
+  /* relative -> 무조건 부모따라 */
   font-size: 20px;
   font-weight: 500;
   /* display: block; 인라인형태는 높이를 줄수없어서 디스플레이형태로
@@ -100,17 +93,42 @@ ul{} -> ul태그는 중복이 많아서 잘사용하지않음
   padding-left: 50px;
   padding-right: 50px;
   transition: all 0.25s ease;
+  /* border-bottom: 2px solid transparent; */
 }
-
-.list .depth02 li a:hover {
+.gnb .list li .depth01:after {
+  /* 내용을 넣어야지만 화면에 보여진다 */
+  content: "";
+  display: block;
+  width: 100%;
+  /* width는 기준이 있어야함  -> 따로 after를 제외한 코드에 기준(포지션)을 잡아줘야한다*/
+  /* width는 부모이 '포지션'을 따라감 */
+  height: 3px;
+  background-color: #f60;
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  /* bottom이 0이면 바텀의 왼쪽 꼭지점이 기준
+  탑은 위에서 아래로 바텀은 아래서 위로
+  따라서 바텀을 내리려면 -값을 줘야한다
+  */
+  transform: scaleX(0);
+  /* x값이 0으로 */
+  transition: all 0.25s ease;
+  z-index: 1;
+}
+.gnb .list li:hover .depth01 {
+  /* >딱한단계만 내려감 바로밑에있는li만 적용되고 그아래아래있는li에는 적용안됨 */
   color: #f60;
 }
-
-.list .depth02 {
+.gnb .list li:hover .depth01:after {
+  transform: scaleX(1);
+}
+.gnb .list li .depth02 {
   text-align: center;
   padding-top: 10px;
+  text-align: left;
 }
-.list .depth02 li {
+.gnb .list li .depth02 li a {
   display: flex;
   /* height: 50px; */
   justify-content: center;
@@ -119,3 +137,23 @@ ul{} -> ul태그는 중복이 많아서 잘사용하지않음
   padding-bottom: 10px;
   transition: all 0.25s ease;
 }
+
+.popup {
+  display: none;
+  position: fixed;
+  background-color: #fff;
+  border: 1px solid #f60;
+  padding: 15px;
+  left: 100px;
+  top: 100px;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+}
+.popup .content {
+  width: 400px;
+  height: 400px;
+  background-color: aqua;
+  margin-bottom: 10px;
+}
+
+/* sass / scss */
+/* css를 빠르게 입력할수있는 기법 */
