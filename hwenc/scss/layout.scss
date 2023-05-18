@@ -1,4 +1,6 @@
 $main-color: #f60;
+@import "vars";
+//컴파일 되지않은 파일을 가져올때는 임포트 언더바떼고
 /*
 position 
 flex
@@ -33,7 +35,7 @@ ul{} -> ul태그는 중복이 많아서 잘사용하지않음
     /*z-index는 반드시 본인이 포지션을 가지고있어야한다  */
     /* pseudo element 가상의 엘리먼트 - 빈 div같은걸 따로 생성하기보다 after로 가상의 요소를 하나만들어서 사용 */
   }
-  &:hover {
+  &.on {
     height: 350px;
     background-color: rgba(255, 255, 255, 1);
     .list {

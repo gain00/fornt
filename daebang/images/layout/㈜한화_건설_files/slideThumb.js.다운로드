@@ -1,0 +1,477 @@
+var SlideThumb = (function () {
+    // defaults options
+    var defaults = {
+        column: 5
+    };
+
+    var prevIdxRow; // 이전 행 위치
+
+    /**
+     * 목록 생성
+     * @param {object} el 라이브러리 호출 시 선언한 대상
+     * @param {object} data 목록 데이터
+     */
+    function setThumbList(el, data) {
+        var $list = el.find('.img_list'); // 목록이 추가되어야 하는 부분
+        var _listLength = data.length;
+        var _html = [];
+        for (var index = 0; index < _listLength; index++) {
+            var element = data[index];
+            var _img = element.imgThumb; // 썸네일 이미지
+            var _tit = element.title; // 제목
+
+            _html.push('<div class="img_thumb">');
+            _html.push('    <a href="#none" class="btn_thumb">');
+            _html.push('        <span class="img_box"><span class="img"><img src="' + _img + '" alt=""></span></span>');
+            _html.push('        <span class="subject">' + _tit + '</span>');
+            _html.push('    </a>');
+            _html.push('</div>');
+        }
+        _html = _html.join('');
+
+        $list.append(_html);
+
+        // 목록 애니메이션
+        setTimeout(function () {
+            $list.find('.img_thumb').addClass('trans');
+            $('#emptyTxt').addClass('trans');
+        }, 100);
+    }
+    /**
+     * 목록 인덱싱
+     * @param {object} el 라이브러리 호출 시 선언한 대상
+     * @param {number} column 컬럼 개수
+     */
+    function setIdx(el, column) {
+        var max = 0;
+        el.find('.img_thumb').each(function (idx, item) {
+            var idxRow = Math.floor(idx / column);
+            $(item).attr('data-idx', idx);
+            $(item).attr('data-idx-row', idxRow);
+            max = idx;
+        });
+
+        return max;
+    }
+    /**
+     * 뷰어 레이어 생성
+     * @param {object} el 라이브러리 호출 시 선언한 대상
+     */
+    function makeViewerLayer(el) {
+        var _html = [];
+
+        var virtualTarget = 'virtualViewer';
+        var imgTarget = 'imgViewer';
+        var htmlLoading = '<p class="pf_loading"><span class="pf_spinner"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></p>';
+
+        // 가상 뷰어
+        _html.push('<p class="virtual_viewer" id="' + virtualTarget + '"></p>');
+
+        // 실제 이미지 뷰어
+        _html.push('<div class="img_viewer" id="' + imgTarget + '">');
+        _html.push('    <span class="img_viewer_arr_wrap">');
+        _html.push('        <span class="img_viewer_arr"></span>');
+        _html.push('    </span>');
+        _html.push('    <div class="img_viewer_inner">');
+        _html.push('        <div class="img_box">');
+        _html.push('            <div id="imgSlide" class="img_slide">');
+        _html.push('            </div>');
+        _html.push('            <div class="arrow">');
+        _html.push('                <button class="btn_change_thumb swiper-button-prev btn_prev">이전</button>');
+        _html.push('                <button class="btn_change_thumb swiper-button-next btn_next">다음</button>');
+        _html.push('            </div>');
+        _html.push('            <div class="swiper-pagination"></div>');
+        _html.push(htmlLoading); // 로딩 아이콘(이미지 슬라이드용)
+        _html.push('        </div>');
+        _html.push('        <div id="infoViewer" class="info">');
+        _html.push('        </div>');
+        _html.push('        <button type="button" class="btn_close_viewer">닫기</button>');
+        _html.push('    </div>');
+        _html.push('</div>');
+
+        // 더보기 버튼
+        _html.push('<div class="btn_wrap">');
+        _html.push('    <button id="btnListMore" class="btn_list_more">더보기<i class="ico"></i></button>');
+        _html.push('</div>');
+
+        _html = _html.join('');
+
+        el.append(_html);
+
+        // 로딩 아이콘(포트폴리오 목록 용)
+        el.find('.img_list').append(htmlLoading);
+    }
+    /**
+     * 데이터 설정
+     * @param {object} data 데이터
+     * @param {number} idx 선택된 데이터 위치
+     */
+    function setDetailData(data, idx) {
+        var selectData = data[idx];
+
+        return selectData;
+    }
+    /**
+     * 뷰어 내용 생성
+     * @param {object} el 라이브러리 호출 시 선언한 대상
+     * @param {object} data 데이터
+     */
+    function makeViewerCont(el, data) {
+        el.find('#imgSlide').empty();
+        el.find('#infoViewer').empty();
+        if (!data) {
+            console.error('일치하는 데이터가 존재하지 않습니다.');
+            return false;
+        }
+        // [start] :: 슬라이드 업데이트 영역
+        var _htmlSlide = [];
+        _htmlSlide.push('<ul class="swiper-wrapper">');
+
+        // 이미지 데이터 삽입
+        var _imgList = data.imgList;
+        var _length = _imgList.length;
+        for (var dataIdx = 0; dataIdx < _length; dataIdx++) {
+            var _img = _imgList[dataIdx];
+            _htmlSlide.push('    <li class="swiper-slide">');
+            _htmlSlide.push('        <img src="' + _img + '" alt="">');
+            _htmlSlide.push('    </li>');
+        }
+
+        _htmlSlide.push('</ul>');
+        _htmlSlide = _htmlSlide.join('');
+
+        el.find('#imgSlide').append(_htmlSlide);
+        // [end] :: 슬라이드 업데이트 영역
+
+        // [start] :: 정보 업데이트 영역
+        var _htmlInfo = [];
+        _htmlInfo.push('<div class="subject">' + data.title + '</div>');
+
+
+        _htmlInfo.push('<div class="detail">');
+
+        // 위치
+        if (data.location) {
+            _htmlInfo.push('    <span class="location">위치 : ' + data.location + '</span>');
+        }
+        // 공사기간
+        if (data.term && data.term.start && data.term.end) {
+            _htmlInfo.push('    <span class="term">공사기간 : ' + data.term.start + ' - ' + data.term.end + '</span>');
+        } else if (data.term && data.term.start) {
+            _htmlInfo.push('    <span class="term">공사기간 : ' + data.term.start + ' - </span>');
+        } else if (data.term && data.term.end) {
+            _htmlInfo.push('    <span class="term">공사기간 : - ' + data.term.end + '</span>');
+        }
+        // 규모
+        if (data.scale) {
+            _htmlInfo.push('    <span class="scale"><em class="tit">규모 :</em>' + data.scale + '</span>');
+        }
+        _htmlInfo.push('</div>');
+        // 부가설명
+        if (data.ex) {
+            _htmlInfo.push('<div class="ex">' + data.ex + '</div>');
+        }
+
+        _htmlInfo = _htmlInfo.join('');
+
+        el.find('#infoViewer').append(_htmlInfo);
+        // [end] :: 정보 업데이트 영역
+    }
+    /**
+     * 슬라이드
+     * @param {object} el 라이브러리 호출 시 선언한 대상
+     */
+    function setSlide(el) {
+        var $viewer = el.find('.img_viewer');
+        var $slideWrap = $viewer.find('.img_box');
+        var $slide = $slideWrap.find('.img_slide');
+        var viewerSlide;
+
+        $slideWrap.find('.pf_loading').show(); // 로딩바 노출
+
+        if ($slide.find('.swiper-slide').length > 1) {
+            $viewer.removeClass('noSlide');
+            viewerSlide = new Swiper($slide, {
+                loop: true,
+                navigation: {
+                    nextEl: $slideWrap.find(".swiper-button-next"),
+                    prevEl: $slideWrap.find(".swiper-button-prev"),
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true
+                }
+            });
+        } else {
+            $viewer.addClass('noSlide');
+        }
+
+        return viewerSlide;
+    }
+    /**
+     * 뷰어 열기
+     * @param {object} el 라이브러리 호출 시 선언한 대상
+     * @param {number} idx 열려야 할 위치
+     * @param {number} data 데이터
+     */
+    function openViewer(el, idx, data) {
+        var $viewer = el.find('.img_viewer');
+        var $virtualViewer = el.find('.virtual_viewer');
+        var $list = el.find('.img_thumb').filter('[data-idx="' + idx + '"]');
+        var $arr = el.find('.img_viewer_arr');
+        var _height; // 뷰어 높이
+
+        // 데이터 삽입
+        var selectData = setDetailData(data, idx); // 데이터 선택
+        makeViewerCont(el, selectData); // 뷰어 컨텐츠 생성
+
+        _height = $viewer.find('.img_viewer_inner').outerHeight() + $('.img_viewer_arr_wrap').outerHeight(); // 실제 뷰어 높이 계산
+
+        $list.addClass('active').siblings().removeClass('active'); // 선택 목록 활성화
+
+        // 가상 뷰어 오픈
+        $virtualViewer.addClass('open').stop().animate({
+            height: _height
+        }, 300);
+
+        // 실제 뷰어 오픈
+        $viewer.addClass('open').stop().animate({
+            height: _height
+        }, 300);
+
+        // 화살표 위치
+        var per = idx % 3;
+        var _width = 382; // 썸네일 넓이
+        var _margin = 26; // 썸네일 간격
+        var _arrWidth = 24; // 화살표 넓이
+        var _baseLeft = _width / 2 - _arrWidth / 2; // 화살표 기본 좌표 값
+        var _left = _baseLeft + (_width * per) + (_margin * per); // 화살표 좌표 값
+
+        $arr.css('left', _left); // 화살표 위치 변경
+    }
+    /**
+     * 뷰어 닫기
+     * @param {object} el 라이브러리 호출 시 선언한 대상
+     * @param {boolean} animation 효과 유 무 설정
+     */
+    function closeViewer(el, animation) {
+        var $viewer = el.find('.img_viewer');
+        var $virtualViewer = el.find('.virtual_viewer');
+
+        el.find('.img_thumb').filter('.active').removeClass('active');
+
+        if (animation === true) {
+            $viewer.removeClass('open').stop().animate({
+                height: 0
+            }, 300);
+            $virtualViewer.removeClass('open').stop().animate({
+                height: 0
+            }, 300);
+        } else {
+            $viewer.removeClass('open').css('height', 0);
+            $virtualViewer.removeClass('open').css('height', 0);
+        }
+        prevIdxRow = undefined; // 목록 행 위치 초기화
+    }
+    /**
+     * 뷰어 위치 이동
+     * @param {obeject} el 라이브러리 호출 시 선언한 대상
+     * @param {obeject} virtualViewer 가상 뷰어 요소
+     * @param {obeject} viewer 실제 뷰어 요소
+     * @param {obeject} idxRow 이동해야 할 행 위치
+     */
+    function moveViewer(el, virtualViewer, viewer, idxRow) {
+        var $listRow = el.find('.img_thumb[data-idx-row="' + idxRow + '"]');
+        $listRow.last().after(virtualViewer); // 가상 뷰어 위치 이동
+
+        var _top = virtualViewer.position().top; // 가상 뷰어 위치
+        viewer.css('top', _top); // 실제 뷰어 이동
+
+        moveScroll(el, idxRow, true); // 스크롤 맞춤
+    }
+    /**
+     * 스크롤 이동
+     * @param {object} el 라이브러리 호출 시 선언한 대상
+     * @param {number} idxRow 목록 행 위치
+     * @param {boolean} animation 효과 유 무 설정
+     */
+    function moveScroll(el, idxRow, animation) {
+        if (prevIdxRow === idxRow) { return; } // 같은 행에 있을 경우 스크롤 이동하지 않음
+
+        prevIdxRow = idxRow;
+        var $listRow = el.find('.img_thumb[data-idx-row="' + idxRow + '"]');
+        var _top = $listRow.offset().top + 150;
+
+        if (animation) {
+            $('html, body').stop().animate({ scrollTop: _top }, 300);
+        } else {
+            $('html, body').scrollTop(_top);
+        }
+    }
+
+    /**
+     * 썸네일 슬라이드
+     * @param {object} elems 선언 대상
+     * @param {object} options 설정 선언
+     */
+    function SlideThumb(elems, options) {
+        if (options) {
+            $.extend(defaults, options);
+        }
+        var _SlideThumb = this;
+        var $elems = $(elems);
+        _SlideThumb.elems = $elems;
+        _SlideThumb.options = defaults;
+        _SlideThumb.data = []; // 내부 데이터 저장소
+
+        makeViewerLayer($elems); // 뷰어 생성
+
+        var _col = _SlideThumb.options.column; // 컬럼 개수
+        var $viewer = $elems.find('.img_viewer'); // 실제 뷰어
+        var $virtuaViewer = $elems.find('.virtual_viewer'); // 가상 뷰어
+
+        setIdx($elems, _col); // 목록 인덱싱
+
+        // 목록 선택
+        $elems.on('click', '.btn_thumb', function () {
+            var $list = $(this).parent();
+            var idx = $list.attr('data-idx'); // 선택 요소 index
+            var idxRow = $list.attr('data-idx-row'); // 선택 요소 컬럼
+            if (!$list.hasClass('active')) {
+                moveViewer($elems, $virtuaViewer, $viewer, idxRow); // 뷰어 위치 이동
+                openViewer($elems, idx, _SlideThumb.data); // 뷰어 열림
+
+                // 슬라이드가 존재하면 삭제
+                if (_SlideThumb.slide !== undefined) {
+                    _SlideThumb.slide.destroy();
+                }
+
+                // 슬라이드 기능 추가
+                _SlideThumb.slide = setSlide($elems);
+
+                // 이미지 로드 확인
+                if (_SlideThumb.slide !== undefined) {
+                    $viewer.find('.swiper-slide-active').find('img').imagesLoaded().always(function () {
+                        $viewer.find('.pf_loading').hide();
+                    });
+                } else {
+                    $viewer.find('img').eq(0).imagesLoaded().always(function () {
+                        $viewer.find('.pf_loading').hide();
+                    });
+                }
+            } else {
+                closeViewer($elems, true);
+            }
+        });
+
+        // 뷰어 닫기
+        $elems.on('click', '.btn_close_viewer', function () {
+            closeViewer($elems, true);
+        });
+    }
+
+    // 강제 생성자 선언 :: new 키워드 누락 방지
+    SlideThumb.factory = function (elems, options) {
+        return new SlideThumb(elems, options);
+    };
+
+    var _proto = SlideThumb.prototype;
+
+    /**
+     * 로딩 시작
+     * @param {number} pageIdx 데이터 페이지 인덱스
+     */
+    _proto.startLazyLoad = function (pageIdx) {
+        var slideThumb = this;
+        var $elems = slideThumb.elems;
+        var $list = $elems.find('.img_list');
+        var $loading = $list.find('.pf_loading');
+
+        if (pageIdx > 1) { // 추가 데이터 로드일 때 실행
+            $list.append($loading); // 로딩바 위치 목록 마지막으로 이동
+        }
+
+        $loading.show(); // 로딩바 노출
+    };
+    /**
+     * 로딩 종료
+     */
+    _proto.endLazyLoad = function () {
+        var slideThumb = this;
+        var $elems = slideThumb.elems;
+        var $loading = $elems.find('.pf_loading');
+
+        $loading.hide();
+    };
+    /**
+     * udpate attribute, event :: 데이터 추가 됐을 때 갱신 필요
+     * @param {object} newData 신규 데이터
+     */
+    _proto.updateData = function (newData) {
+        var slideThumb = this;
+        var $elems = slideThumb.elems;
+        var options = slideThumb.options;
+        var _col = options.column;
+
+        setThumbList($elems, newData); // 썸네일 목록 추가
+        slideThumb.data = slideThumb.data.concat(newData); // 데이터 갱신
+        setIdx($elems, _col); // 목록 인덱싱
+    };
+    /**
+     * 데이터 삭제
+     */
+    _proto.removeData = function () {
+        var slideThumb = this;
+        var $elems = slideThumb.elems;
+        var $listHtml = $elems.find('.img_thumb');
+
+        $listHtml.remove(); // remove dom
+        slideThumb.data = []; // remove data
+    };
+    /**
+     * 상세 뷰어 초기화
+     * @param {boolean} animation 효과 유 무 설정
+     */
+    _proto.closeViewer = function (animation) {
+        var slideThumb = this;
+        var $elems = slideThumb.elems;
+
+        closeViewer($elems, animation);
+    };
+    /**
+     * 더보기 버튼 삭제 :: 더이상 데이터가 없을 때 사용
+     */
+    _proto.removeBtnMore = function () {
+        var slideThumb = this;
+        var $elems = slideThumb.elems;
+
+        $elems.find('.btn_wrap').hide();
+    };
+    /**
+     * 더보기 버튼 노출 :: 필터링 시 데이터 초기화 할 때
+     */
+    _proto.addBtnMore = function () {
+        var slideThumb = this;
+        var $elems = slideThumb.elems;
+
+        $elems.find('.btn_wrap').show();
+    };
+    /**
+     * 빈 데이터 문구 노출 :: 데이터 없을 때
+     */
+    _proto.addWarnEmptyData = function () {
+        var slideThumb = this;
+        var $elems = slideThumb.elems;
+        var txt = '검색된 게시글이 없습니다.';
+
+        $elems.append('<div id="emptyTxt" class="empty_txt">' + txt + '</div>');
+    };
+    /**
+     * 빈 데이터 문구 삭제 :: 데이터 없을 때
+     */
+    _proto.removeWarnEmptyData = function () {
+        $('#emptyTxt').remove();
+    };
+
+    return SlideThumb.factory;
+})();

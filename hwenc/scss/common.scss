@@ -1,4 +1,4 @@
-@charset "UTF-8";
+@import "vars";
 body {
   font-size: 14px;
   color: #111;
@@ -9,7 +9,7 @@ body {
   /*키   :  벨류*/
   /*자바의 상속개념
     부모의 속성을 자식이 그대로 내려받음 
-
+  
   */
   min-height: 4000px;
 }
@@ -22,13 +22,13 @@ a {
 
 .container {
   width: 1200px;
+
   /* margin-left: auto;
     margin-right: auto; */
   margin: 0 auto;
   /* 둘다 오토처리하면 가운데로 보내짐 */
   position: relative;
 }
-
 h2 {
   font-size: 36px;
   font-weight: 700;
@@ -38,15 +38,14 @@ h2 {
 strong {
   font-weight: 700;
 }
-
 p {
   line-height: 1.5;
+  //줄간격
 }
 
 .point-color {
-  color: #f60;
+  color: $main-color;
 }
-
 .section {
   padding: 100px 0;
 }
