@@ -1,0 +1,31 @@
+@import "vars";
+.main-visual {
+  video {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+  }
+  .txt {
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 50px;
+  }
+  .scroll {
+    position: absolute;
+    right: 200px;
+    bottom: 0;
+    color: #fff;
+    span {
+      writing-mode: vertical-rl;
+    }
+    &::after {
+      content: " ";
+      height: 150px;
+      width: 1px;
+      background-color: #fff;
+      display: block;
+    }
+  }
+}

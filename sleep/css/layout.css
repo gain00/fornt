@@ -1,0 +1,87 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+  color: #fff;
+}
+.header .logo a {
+  height: 100px;
+  display: flex;
+  align-items: center;
+}
+.header.on::before {
+  top: 0;
+}
+.header.on::after {
+  opacity: 1;
+}
+.header::after {
+  content: " ";
+  display: block;
+  height: 1px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 100px;
+  background-color: #fff;
+  opacity: 0;
+  transition: all 0.25s ease 0.5s;
+  pointer-events: none;
+}
+.header:before {
+  content: " ";
+  display: block;
+  height: 160px;
+  width: 100%;
+  background-color: rgb(0, 0, 0);
+  position: absolute;
+  left: 0;
+  top: -160px;
+  transition: all 0.5s ease;
+  z-index: -1;
+}
+.header .gnb .list {
+  display: flex;
+}
+.header .gnb .list:hover .depth02 {
+  display: block;
+  display: flex;
+}
+.header .gnb .list > li {
+  border-radius: 0px 0px 20px 20px;
+  padding-bottom: 30px;
+}
+.header .gnb .list .depth01 {
+  display: flex;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: 500;
+  padding: 0 60px;
+  position: relative;
+}
+.header .gnb .list .depth01::after {
+  content: " ";
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background-color: #fff;
+  left: 50px;
+  right: 50px;
+  transform: scaleX(0);
+  transition: all 0.25s ease;
+}
+.header .gnb .list .depth02 {
+  position: absolute;
+  text-align: center;
+  display: none;
+  padding-left: 40px;
+}
+.header .gnb .list .depth02 li a {
+  display: block;
+  padding: 20px;
+}

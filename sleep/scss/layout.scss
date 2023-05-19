@@ -1,0 +1,95 @@
+@import "vars";
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+  color: #fff;
+  .logo a {
+    height: 100px;
+    display: flex;
+    align-items: center;
+  }
+  &.on::before {
+    top: 0;
+  }
+  &.on::after {
+    opacity: 1;
+  }
+  &::after {
+    content: " ";
+    display: block;
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 100px;
+    background-color: #fff;
+    opacity: 0;
+    transition: all 0.25s ease 0.5s; //맨뒤에 숫자는 딜레이
+    pointer-events: none; //마우스 반응하지않음
+  }
+  &:before {
+    content: " ";
+    display: block;
+    height: 160px;
+    width: 100%;
+    background-color: rgb(0, 0, 0);
+    position: absolute;
+    left: 0;
+    top: -160px;
+    transition: all 0.5s ease;
+    z-index: -1;
+  }
+  .gnb {
+    .list {
+      &:hover {
+        .depth02 {
+          display: block;
+          display: flex;
+        }
+      }
+      display: flex;
+      > li {
+        border-radius: 0px 0px 20px 20px;
+        padding-bottom: 30px;
+      }
+      .depth01 {
+        display: flex;
+        height: 100px;
+        align-items: center;
+        justify-content: center;
+        text-transform: capitalize;
+        font-size: $h3;
+        font-weight: 500;
+        padding: 0 60px;
+        position: relative;
+        &::after {
+          content: " ";
+          position: absolute;
+          bottom: 0;
+          height: 2px;
+
+          background-color: #fff;
+          left: 50px;
+          right: 50px;
+          transform: scaleX(0); //물리적 변화에 관련된 css
+          transition: all 0.25s ease;
+        }
+      }
+      .depth02 {
+        position: absolute;
+        text-align: center;
+        display: none;
+        padding-left: 40px;
+        li {
+          a {
+            display: block; // 블록처리를 해줘야 상하컨트롤가능
+            padding: 20px; //인라인은 좌우만
+          }
+        }
+      }
+    }
+  }
+}

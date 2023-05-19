@@ -1,0 +1,51 @@
+@import "vars";
+//!important > style > id >  class
+
+header {
+  width: 100%;
+
+  background-color: #000;
+  z-index: 99;
+  position: fixed;
+  justify-content: space-between;
+  color: #fff;
+  display: flex;
+
+  .logo {
+    a {
+      height: 100px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .gnb {
+    .list {
+      display: flex;
+      top: 30px;
+      color: #fff;
+      > li {
+        border-radius: 0px 0px 20px 20px;
+        padding-bottom: 30px;
+      }
+      &:hover {
+        .depth02 {
+          display: block;
+          display: flex;
+        }
+      }
+      .depth01 {
+        display: flex;
+        font-size: $h3;
+        position: relative;
+        padding: 0 60px;
+        align-items: center;
+        justify-content: center;
+        height: 100px;
+        font-weight: 500;
+      }
+      .depth02 {
+        display: none;
+      }
+    }
+  }
+}

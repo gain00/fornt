@@ -48,7 +48,7 @@
           }
           @for $i from 1 through 5 {
             &.visual0#{$i} .img {
-              background-image: url("../images/main/visual0#{$i+1}.jpg");
+              background-image: url("../images/main/visual0#{$i}.jpg");
             }
           }
         }
@@ -414,6 +414,67 @@
     }
   }
 }
+.banner {
+  display: flex;
+  color: #fff;
+  > div {
+    width: 50%;
+    display: flex;
+    padding: 80px 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    .inner {
+      width: 600px;
+      //border: 1px solid #f00;
+    }
+  }
+  .forena {
+    background-image: url("../images/main/main_banner_bg_img01.jpg");
+    justify-content: end;
+    h2 {
+      text-transform: uppercase;
+      letter-spacing: 20px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: $h4;
+    }
+  }
+  .util-menu {
+    background-image: url("../images/main/main_banner_bg_img02.jpg");
+    .inner {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 50px;
+      align-items: center;
+      h2 {
+        margin-bottom: 0;
+        span {
+          font-size: $h4;
+          display: block;
+          margin-top: 40px;
+        }
+      }
+      ul {
+        li {
+          a {
+            display: block;
+            padding: 10px 0;
+            font-size: $h4;
+            border-bottom: 1px solid #fff;
+            width: 200px;
+            display: flex;
+            justify-content: space-between;
+            &:after {
+              @include icon("\e5cc");
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .more {
   position: absolute;
   right: 0;

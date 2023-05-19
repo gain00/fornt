@@ -41,19 +41,19 @@
   font-size: 18px;
 }
 .main-visual .mask .list li.visual01 .img {
-  background-image: url("../images/main/visual02.jpg");
+  background-image: url("../images/main/visual01.jpg");
 }
 .main-visual .mask .list li.visual02 .img {
-  background-image: url("../images/main/visual03.jpg");
+  background-image: url("../images/main/visual02.jpg");
 }
 .main-visual .mask .list li.visual03 .img {
-  background-image: url("../images/main/visual04.jpg");
+  background-image: url("../images/main/visual03.jpg");
 }
 .main-visual .mask .list li.visual04 .img {
-  background-image: url("../images/main/visual05.jpg");
+  background-image: url("../images/main/visual04.jpg");
 }
 .main-visual .mask .list li.visual05 .img {
-  background-image: url("../images/main/visual06.jpg");
+  background-image: url("../images/main/visual05.jpg");
 }
 .main-visual .mask .btns {
   position: absolute;
@@ -416,6 +416,63 @@
 }
 .social .control-box .pagination .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
   background-color: #f60;
+}
+
+.banner {
+  display: flex;
+  color: #fff;
+}
+.banner > div {
+  width: 50%;
+  display: flex;
+  padding: 80px 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.banner > div .inner {
+  width: 600px;
+}
+.banner .forena {
+  background-image: url("../images/main/main_banner_bg_img01.jpg");
+  justify-content: end;
+}
+.banner .forena h2 {
+  text-transform: uppercase;
+  letter-spacing: 20px;
+  margin-bottom: 20px;
+}
+.banner .forena p {
+  font-size: 18px;
+}
+.banner .util-menu {
+  background-image: url("../images/main/main_banner_bg_img02.jpg");
+}
+.banner .util-menu .inner {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 50px;
+  align-items: center;
+}
+.banner .util-menu .inner h2 {
+  margin-bottom: 0;
+}
+.banner .util-menu .inner h2 span {
+  font-size: 18px;
+  display: block;
+  margin-top: 40px;
+}
+.banner .util-menu .inner ul li a {
+  display: block;
+  padding: 10px 0;
+  font-size: 18px;
+  border-bottom: 1px solid #fff;
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+}
+.banner .util-menu .inner ul li a:after {
+  font-family: "Material Icons";
+  content: "\e5cc";
 }
 
 .more {
