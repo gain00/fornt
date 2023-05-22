@@ -1,34 +1,24 @@
-@import "vars";
+@charset "UTF-8";
 body {
-  font-size: 14px;
-  color: #111;
-  font-family: "DOSPilgiMedium", "Noto Sans KR";
-  /*폰트 두개쓸때 두번째거는 첫번째개 적용안될때, 한글폰트는 대부분 영어폰트포함이라 영문 폰트먼저 써야함*/
+  font-size: 16px;
+  color: #bb8d8d;
+  font-family: "Raleway", "Noto Sans KR", "돋움";
   font-weight: 400;
-  /*몇 몇 태그들은 부모의속성을 물려받지않는 것들도 있다 대표적으로 a태그*/
-  /*키   :  벨류*/
-  /*자바의 상속개념
-    부모의 속성을 자식이 그대로 내려받음 
-  
-  */
   min-height: 4000px;
+  /* 몇 몇 태그들은 부모의 속성을 물려받지 않는 것들도 있다. */
 }
 
 a {
   text-decoration: none;
   color: inherit;
-  /*inherit 상속*/
 }
 
 .container {
   width: 1200px;
-
-  /* margin-left: auto;
-    margin-right: auto; */
   margin: 0 auto;
-  /* 둘다 오토처리하면 가운데로 보내짐 */
   position: relative;
 }
+
 h2 {
   font-size: 36px;
   font-weight: 700;
@@ -37,15 +27,17 @@ h2 {
 
 strong {
   font-weight: 700;
+  /* 100/300/400/500/700/900 */
 }
+
 p {
   line-height: 1.5;
-  //줄간격
 }
 
 .point-color {
-  color: $main-color;
+  color: #f60;
 }
+
 .section {
   padding: 100px 0;
 }

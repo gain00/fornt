@@ -1,4 +1,7 @@
 @import "vars";
+
+//!important > style > id > class
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -10,54 +13,67 @@
     height: 100px;
     display: flex;
     align-items: center;
+    padding: 0 20px;
+    //background-color: #f00 !important;
   }
-  &.on::before {
+  #logo a {
+    //background-color: #00f;
+  }
+  &.on:before {
     top: 0;
   }
-  &.on::after {
+  &.on:after {
     opacity: 1;
+    transition-delay: 0.25s;
   }
-  &::after {
-    content: " ";
+
+  &:after {
+    content: "";
     display: block;
     height: 1px;
     width: 100%;
     position: absolute;
     left: 0;
     top: 100px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.25);
     opacity: 0;
-    transition: all 0.25s ease 0.5s; //맨뒤에 숫자는 딜레이
-    pointer-events: none; //마우스 반응하지않음
+    transition: all 0.25s ease;
+    pointer-events: none;
   }
   &:before {
-    content: " ";
+    content: "";
     display: block;
     height: 160px;
     width: 100%;
-    background-color: rgb(0, 0, 0);
+    background-color: rgba(22, 22, 22, 0.75);
+    backdrop-filter: blur(20px);
     position: absolute;
     left: 0;
     top: -160px;
-    transition: all 0.5s ease;
     z-index: -1;
+    transition: all 0.5s ease;
   }
   .gnb {
     .list {
-      &:hover {
-        .depth02 {
-          display: block;
-          display: flex;
-        }
-      }
       display: flex;
       > li {
+        //background-color: #f00;
         border-radius: 0px 0px 20px 20px;
         padding-bottom: 30px;
+        &:hover {
+          //background-color: #f00;
+          .depth01:after {
+            transform: scaleX(1);
+          }
+          .depth02 {
+            //display: block;
+            display: flex;
+          }
+        }
       }
       .depth01 {
-        display: flex;
         height: 100px;
+        display: flex;
         align-items: center;
         justify-content: center;
         text-transform: capitalize;
@@ -65,28 +81,28 @@
         font-weight: 500;
         padding: 0 60px;
         position: relative;
-        &::after {
-          content: " ";
+        &:after {
+          content: "";
+          display: block;
           position: absolute;
           bottom: 0;
           height: 2px;
-
-          background-color: #fff;
           left: 50px;
           right: 50px;
           transform: scaleX(0); //물리적 변화에 관련된 css
           transition: all 0.25s ease;
+          background-color: #fff;
         }
       }
       .depth02 {
-        position: absolute;
         text-align: center;
         display: none;
+        position: absolute;
         padding-left: 40px;
         li {
           a {
-            display: block; // 블록처리를 해줘야 상하컨트롤가능
-            padding: 20px; //인라인은 좌우만
+            display: block;
+            padding: 20px;
           }
         }
       }

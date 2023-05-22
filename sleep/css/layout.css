@@ -10,52 +10,58 @@
   height: 100px;
   display: flex;
   align-items: center;
+  padding: 0 20px;
 }
-.header.on::before {
+.header.on:before {
   top: 0;
 }
-.header.on::after {
+.header.on:after {
   opacity: 1;
+  transition-delay: 0.25s;
 }
-.header::after {
-  content: " ";
+.header:after {
+  content: "";
   display: block;
   height: 1px;
   width: 100%;
   position: absolute;
   left: 0;
   top: 100px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.25);
   opacity: 0;
-  transition: all 0.25s ease 0.5s;
+  transition: all 0.25s ease;
   pointer-events: none;
 }
 .header:before {
-  content: " ";
+  content: "";
   display: block;
   height: 160px;
   width: 100%;
-  background-color: rgb(0, 0, 0);
+  background-color: rgba(22, 22, 22, 0.75);
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
   position: absolute;
   left: 0;
   top: -160px;
-  transition: all 0.5s ease;
   z-index: -1;
+  transition: all 0.5s ease;
 }
 .header .gnb .list {
-  display: flex;
-}
-.header .gnb .list:hover .depth02 {
-  display: block;
   display: flex;
 }
 .header .gnb .list > li {
   border-radius: 0px 0px 20px 20px;
   padding-bottom: 30px;
 }
-.header .gnb .list .depth01 {
+.header .gnb .list > li:hover .depth01:after {
+  transform: scaleX(1);
+}
+.header .gnb .list > li:hover .depth02 {
   display: flex;
+}
+.header .gnb .list .depth01 {
   height: 100px;
+  display: flex;
   align-items: center;
   justify-content: center;
   text-transform: capitalize;
@@ -64,21 +70,22 @@
   padding: 0 60px;
   position: relative;
 }
-.header .gnb .list .depth01::after {
-  content: " ";
+.header .gnb .list .depth01:after {
+  content: "";
+  display: block;
   position: absolute;
   bottom: 0;
   height: 2px;
-  background-color: #fff;
   left: 50px;
   right: 50px;
   transform: scaleX(0);
   transition: all 0.25s ease;
+  background-color: #fff;
 }
 .header .gnb .list .depth02 {
-  position: absolute;
   text-align: center;
   display: none;
+  position: absolute;
   padding-left: 40px;
 }
 .header .gnb .list .depth02 li a {
