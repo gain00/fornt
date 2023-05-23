@@ -207,6 +207,7 @@
 }
 .product .img-area img:nth-child(1) {
   margin-right: -30px;
+  position: relative;
 }
 .product .img-area img:nth-child(3) {
   margin-left: 30px;

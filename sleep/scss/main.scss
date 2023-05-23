@@ -239,6 +239,7 @@
     padding-right: 100px;
     img:nth-child(1) {
       margin-right: -30px;
+      position: relative; // 왜 포지션 지우면 두번째 자식이 위에나오는지?
     }
     img:nth-child(3) {
       margin-left: 30px;
