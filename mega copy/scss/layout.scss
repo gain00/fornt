@@ -11,8 +11,9 @@
   .logo {
     border: solid 1px #1f1;
     height: 80px; //header에 적용하면 왜 높이가다른지
-    padding: 0 50px;
+
     img {
+      margin-left: 100px;
       height: 40px;
       top: 20px;
       position: absolute;

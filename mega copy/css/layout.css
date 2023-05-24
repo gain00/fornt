@@ -10,9 +10,9 @@
 .header .logo {
   border: solid 1px #1f1;
   height: 80px;
-  padding: 0 50px;
 }
 .header .logo img {
+  margin-left: 100px;
   height: 40px;
   top: 20px;
   position: absolute;
