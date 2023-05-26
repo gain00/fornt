@@ -1,12 +1,14 @@
 const computerList = document.querySelectorAll(".computer ul li");
 const humanList = document.querySelectorAll(".human ul li");
 const resultList = document.querySelector(".result ul");
+
 const appendItems = function (className) {
   const apppendItem = document.createElement("li");
   apppendItem.classList.add(className);
   apppendItem.textContent = className.substring(0, 1);
   resultList.appendChild(apppendItem);
 };
+
 let computerChoice = 0;
 // function makeRandom(){
 //아래꺼랑똑같음 하지만 아래꺼쓰는게
