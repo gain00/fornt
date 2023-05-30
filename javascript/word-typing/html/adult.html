@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="">
+      <label><span>AGE</span><input type="text" class="user-age" /></label>
+      <button class="btn-adult">성인인증</button>
+    </form>
+    <script>
+      const userAGE = document.querySelector(".user-age");
+      const btnAUDLT = document.querySelector(".btn-adult");
+
+      btnAUDLT.addEventListener("click", (e) => {
+        const age = ParseInt(userAGE.value);
+        if (userAGE.value > 20) {
+          e.preventDefault();
+          alert("로그인성공");
+          location.href = "http://www.daum.net";
+        }
+      });
+    </script>
+  </body>
+</html>

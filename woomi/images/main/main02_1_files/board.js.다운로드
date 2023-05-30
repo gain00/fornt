@@ -1,0 +1,13 @@
+detailPop = function(){
+    var $list_wrap = $('.gallery_list'),
+        $list = $list_wrap.find('li').find('a'),
+        $detailPop_wrap = $('.Detailpop_wrap');
+        $detailPop_close = $detailPop_wrap.find('.Detailpop_close');
+
+    $list.on('click',function(){
+        $detailPop_wrap.fadeIn();
+    });
+    $detailPop_close.on('click',function(){
+        $detailPop_wrap.fadeOut();
+    });
+}()

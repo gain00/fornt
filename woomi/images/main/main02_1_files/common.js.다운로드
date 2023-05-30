@@ -1,0 +1,644 @@
+var Woomi = Woomi || {};
+
+Woomi = {
+    /**
+     * Woomi common
+     * @param {function}
+     */
+    common : function(){
+        var $window = $(window),
+            $body = $('body'),
+            $header = $('#header'),
+            $master = $('.masterpiece_wrap');
+
+        // @ gnb
+        var $gnb = $('#gnb'), $depth1 = $gnb.find('.depth1'), $bg = $('#bg');
+        var $breadCrumb = $("#breadCrumbScroll");
+
+            // depth1 hover
+            $depth1.find('>a').on('mouseenter', function(){
+                $(this).parent('.depth1').addClass('active').siblings().removeClass('active');
+
+                $('.depth2_wrap').addClass('active');
+
+                var depth2Len = $('.depth2_wrap').eq(1).find('.depth2_list').children('li').length;
+                var depth2H = $('.depth2_wrap').find('.depth2_list').children('li').outerHeight(true);
+
+                $header.addClass('over');
+
+                $('.depth2_wrap').height(depth2Len * depth2H + 54);
+                $bg.addClass('active');
+                $bg.height(depth2Len * depth2H + 54);
+            });
+
+            // depth1 leave
+            $depth1.find('>a').on('mouseleave', function(){
+                $depth1.removeClass('active');
+            });
+
+            // header leave
+            $header.on('mouseleave', function(){
+                //$depth1.removeClass('active');
+                $('.depth2_wrap').removeClass('active');
+                $('.depth2_wrap').height(0);
+                $header.removeClass('over');
+                $bg.removeClass('active');
+                $bg.height(0);
+            });
+
+            //gnb bg button hover
+            $bg.find('.bg_btn').on('mouseenter', function(){
+                $(this).css({'height':'120px'})
+                $(this).siblings().css({'height':'86px'});
+            }).on('mouseleave', function(){
+                $('.bg_btn').css({'height':'100px'});
+            });
+
+            //masterpiece header
+            var $masterHeader = $master.find('#header'),
+                $masterlnb = $master.find('#breadCrumbWrap').children('.breadCrumb_scroll');
+
+            $masterHeader.addClass('master_head');
+            $masterlnb.addClass('master');
+
+            var currentT = 0;
+
+            $window.on('scroll', function(e){
+                e.preventDefault();
+                //masterpiece header
+                $masterHeader.removeClass('master_head');
+                $masterlnb.removeClass('master');
+                var scrollT = $(this).scrollTop();
+
+                // scroll상태 체크
+                if( scrollT > currentT ){
+                    $body.attr('data-scroll','down');
+                }else if ( scrollT < currentT ) {
+                    $body.attr('data-scroll','up');
+                }
+
+                if( $body.attr('data-scroll') === 'down' ){
+                    $header.attr('data-fixed', 'none');
+                    $breadCrumb.attr('data-fixed', 'none');
+
+                }else if( $body.attr('data-scroll') === 'up' ){
+                    $header.attr('data-fixed', 'fixed');
+                    $breadCrumb.attr('data-fixed', 'fixed');
+
+                    if( scrollT == 0 ){
+                        $header.attr('data-fixed', 'none');
+                        $masterHeader.addClass('master_head');
+                        $masterlnb.addClass('master');
+                    }else{
+                        $header.attr('data-fixed', 'fixed');
+                    }
+                }
+
+                currentT = scrollT;
+            });
+
+            // @ gnb menu active
+            var gnbPath = location.pathname.split('/'),
+                gnbPathArray = [gnbPath[2], gnbPath[3]];
+
+            $depth1.find('>a').each(function(idx, item){
+                var href = $(item).attr("href");
+
+                if(href.indexOf(gnbPathArray[0]) > 0){
+                    $(this).parent().addClass("current");
+                }
+            });
+            $(".depth1.current .depth2_list li").find('>a').each(function(idx, item){
+                var href = $(item).attr("href");
+
+                if(href.indexOf(gnbPathArray[1]) > 0){
+                    $(this).parent().addClass("current");
+                }
+            });
+
+            // famSite 활성화
+            $('#famBtn').on('click', function(){
+                if( $('#famSite').hasClass('open') ){
+                    $('#famSite').removeClass('open');
+                    $(window).on('load scroll',function(){
+                        $('#famSite').removeClass('open');
+                    });
+                }else{
+                    $('#famSite').addClass('open');
+                }
+            });
+
+            // famSite 특정 영역 외 클릭 비활성화
+            $body.on("click", function (e) {
+                // famSite
+                if ($("#famSite").hasClass("open")) {
+                    if (!$("#famSite").has(e.target).length) {
+                        $("#famSite").removeClass("open");
+                    }
+                }
+            });
+
+            var winH = $(window).height();
+
+            // quickMenu
+            $(window).on('load scroll', function(e){
+                e.preventDefault();
+
+                var scrollT = $(this).scrollTop(),
+                    footerT = $("#footer").offset().top;
+
+                if (scrollT > 300){
+                    $('#quickMenu').fadeIn();
+                } else {
+                    $('#quickMenu').fadeOut();
+                }
+
+                if(footerT <= winH + scrollT ){
+                    $(".quick_menu").addClass("on");
+                }else{
+                    $(".quick_menu").removeClass("on");
+                }
+            });
+
+            // topBtn
+            $('#topBtn').on('click',function(e){
+                e.preventDefault();
+                $('html, body').stop().animate({
+                    scrollTop : 0
+                }, 200);
+            });
+    },
+    /**
+     * 공통 tabList
+     * @param {function}
+     */
+     tabList : function(){
+
+        //tabList
+        $("#tabList").find("li > a").on("click", function(){
+            var _tabLi =  $(this).parent("li");
+            var _tabIdx = _tabLi.index();
+
+            _tabLi.addClass("on").siblings("li").removeClass("on");
+            $(".tab_cont").eq(_tabIdx).addClass("active").siblings().removeClass("active");
+        });
+    },
+    scroll : function(){
+        $(window).on('load scroll', function(){
+            var window_scroll = $(window).scrollTop();
+            $('[data-scroll]').each(function(idx,item){
+                var sec_scroll = $(item).offset().top - $(item).data('offset');
+                if(window_scroll > sec_scroll){
+                    $(item).addClass('on');
+                }
+            })
+        });
+    },
+    masterpieceQuick : function(){
+        // quickMenu
+        var winH = $(window).height();
+        $(window).on('load scroll', function(e){
+            e.preventDefault();
+            var scrollT = $(this).scrollTop(),
+                masterpiece_banner = $('.masterpiece_banner').offset().top;
+
+            if(winH + scrollT > masterpiece_banner){
+                $('.quick_menu').addClass('masterpiceQuick');
+            }else{
+                $('.quick_menu').removeClass('masterpiceQuick');
+            }
+        });
+    },
+    //어두운 배경에서 퀵메뉴 색상 변경
+    quickChange : function(){
+        $(window).on('load scroll', function(){
+            var quick = $('.quick_menu'),
+                quick_scroll = quick.offset().top,
+                quick_height = quick.height() / 2;
+            $('[data-class="quick_change"]').each(function(idx,item){
+                var quickChange_scroll = $(item).offset().top;
+                if($(item).length == 1){
+                    if(quick_scroll > quickChange_scroll - quick_height){
+                        quick.addClass('whiteChage');
+                    }
+                    else{
+                        quick.removeClass('whiteChage');
+                    }
+                }else{
+                    if(quick_scroll > quickChange_scroll - quick_height){
+                        quick.addClass('whiteChage');
+                        if($(window).scrollTop() > quickChange_scroll){
+                            quick.removeClass('whiteChage');
+                        }
+                    }else{
+                        quick.removeClass('whiteChage');
+                    }
+                }
+            })
+        });
+    },
+    briefPopup: function(){
+        $('.woomi_brief').on('click', function(){
+            popupOpen();
+        });
+
+        $('.btn_close').on('click', function(e){
+            e.preventDefault();
+            popupClose();
+        });
+
+        function popupOpen(){
+            $('.woomi_brief_pop').addClass('open');
+            $('body').addClass('pop_open');
+            woomiBriefSwiper = new Swiper(".woomi_brief_slide", options);
+            swiperReInit();
+        }
+
+        function popupClose(){
+            $('.woomi_brief_pop').removeClass('open');
+            $('body').removeClass('pop_open');
+        }
+
+        $('#woomiBriefPopup').on('click', function (e) {
+            if ($(e.target).is('.woomi_brief_pop') || $(e.target).is('.btn_close')) {
+                popupClose();
+            }
+        });
+
+        var woomiBriefSwiper, options;
+        var $numWrap = $('#numWrap'), cntCount = $numWrap.find('.num'), totalCount = $numWrap.find('.total');
+
+        // swiper options
+        options = {
+            mousewheel: {
+                invert: false,
+            },
+            loop: false,
+            slidesPerView: 1,
+            slideToClickedSlide : true,
+            clickable: true,
+            pagination: {
+                el: ".woomi_brief_slide .swiper-pagination",
+                type: "progressbar",
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            on : {
+                init: function(){
+                    var cntIdx = this.realIndex + 1, slideLen = this.slides.length;
+                        cntCount.text(cntIdx);
+                        totalCount.text(slideLen);
+
+                    var cntText = $('.woomi_brief_slide .swiper-slide-active').find('.ir').text();
+                    $('.info_wrap').find('p').text(cntText);
+                },
+                slideChangeTransitionEnd: function(){
+                    var cntIdx = this.realIndex + 1, slideLen = this.slides.length;
+                        cntCount.text(cntIdx);
+                        totalCount.text(slideLen);
+
+                    var cntText = $('.woomi_brief_slide .swiper-slide-active').find('.ir').text();
+                    $('.info_wrap').find('p').text(cntText);
+                }
+            }
+        };
+
+        function getUrlParams() {
+            var params = {};
+            window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
+                params[key] = value;
+            });
+            return params;
+        };
+
+        // 팝업 파라미터 url : /kr/index.do?type=woomiBrief&page=0
+        var param = getUrlParams();
+        urlResultType = param.type;
+        urlResultPage = param.page;
+
+        //type 파라미터가 붙을 때
+        if(urlResultType){
+            $('.woomi_brief').trigger('click');
+
+            //page 파라미터가 붙을 때
+            switch (urlResultPage) {
+                case '0':
+                    woomiBriefSwiper.slideTo(0, 0);
+                    woomiBriefSwiper = new Swiper(".woomi_brief_slide", {
+                        initialSlide: 0,
+                        on: {
+                            init: function(){
+                                var cntIdx = this.realIndex + 1, slideLen = this.slides.length;
+                                    cntCount.text(cntIdx);
+                                    totalCount.text(slideLen);
+
+                                var cntText = $('.woomi_brief_slide .swiper-slide-active').find('.ir').text();
+                                $('.info_wrap').find('p').text(cntText);
+                            }
+                        }
+                    });
+                break;
+                case '1':
+                    woomiBriefSwiper.slideTo(1, 0);
+                    woomiBriefSwiper = new Swiper(".woomi_brief_slide", {
+                        initialSlide: 1,
+                        on: {
+                            init: function(){
+                                $('img[usemap]').rwdImageMaps();
+                            }
+                        }
+                    });
+                break;
+                case '2':
+                    woomiBriefSwiper.slideTo(2, 0);
+                    woomiBriefSwiper = new Swiper(".woomi_brief_slide", {
+                        initialSlide: 2,
+                        on: {
+                            init: function(){
+                                $('img[usemap]').rwdImageMaps();
+                            }
+                        }
+                    });
+                break;
+                case '3':
+                    woomiBriefSwiper.slideTo(3, 0);
+                    woomiBriefSwiper = new Swiper(".woomi_brief_slide", {
+                        initialSlide: 3,
+                        on: {
+                            init: function(){
+                                $('img[usemap]').rwdImageMaps();
+                            }
+                        }
+                    });
+                break;
+                case '4':
+                    woomiBriefSwiper.slideTo(4, 0);
+                    woomiBriefSwiper = new Swiper(".woomi_brief_slide", {
+                        initialSlide: 4,
+                        on: {
+                            init: function(){
+                                $('img[usemap]').rwdImageMaps();
+                            }
+                        }
+                    });
+                break;
+                case '5':
+                    woomiBriefSwiper.slideTo(5, 0);
+                    woomiBriefSwiper = new Swiper(".woomi_brief_slide", {
+                        initialSlide: 5,
+                        on: {
+                            init: function(){
+                                $('img[usemap]').rwdImageMaps();
+                            }
+                        }
+                    });
+                break;
+                case '6':
+                    woomiBriefSwiper.slideTo(6, 0);
+                    woomiBriefSwiper = new Swiper(".woomi_brief_slide", {
+                        initialSlide: 6,
+                        on: {
+                            init: function(){
+                                $('img[usemap]').rwdImageMaps();
+                            }
+                        }
+                    });
+                break;
+
+                default:
+                break;
+            };
+        };
+
+        function swiperReInit(){
+            if(woomiBriefSwiper ) woomiBriefSwiper.destroy();
+            $('.swiper-wrapper').attr('style', '');
+            woomiBriefSwiper = new Swiper(".woomi_brief_slide", options);
+        };
+    },
+    init : function(){
+        Woomi.common();
+        Woomi.tabList();
+        Woomi.briefPopup();
+    }
+}
+Woomi.init();
+
+
+// @ BreadCrumb menu active
+var path = location.pathname.split('/'),
+    pathArray = [path[2], path[3], path[4]];
+
+var depthTitle;
+var business = {};
+var langUrl = '/kr';
+
+
+business.list = [
+    { masterpiece : "마스터피스"},
+    { house : "주택사업"},
+    { building : "건축사업"},
+    { civil : "토목사업"},
+    { other : "기타사업"},
+    { investment : "투자사업"},
+]
+
+business.area = {
+    "마스터피스" : [
+        { name : "내린천 휴게소", url : langUrl + "/business/masterpiece/naerincheon_rest_area.do" },
+        { name : "동탄 린 스트라우스 더레이크", url : langUrl + "/business/masterpiece/dongtan_lynn_straus.do" },
+        { name : "고현~하동IC 1공구 국도건설공사", url : langUrl + "/business/masterpiece/highway.do" },
+        { name : "레이크꼬모 동탄", url : langUrl + "/business/masterpiece/lakecomo.do" },
+        { name : "광교 우미 뉴브", url : langUrl + "/business/masterpiece/newv.do" },
+    ],
+    "주택사업" : [
+        { name : "사업 개요", url : langUrl + "/business/house.do" },
+        { name : "사업 실적", url : langUrl + "/business/house/portfolio-all.do" },
+    ],
+    "건축사업" : [
+        { name : "사업 개요", url : langUrl + "/business/building.do" },
+        { name : "사업 실적", url : langUrl + "/business/building/portfolio-all.do" },
+    ],
+    "토목사업" : [
+        { name : "사업 개요", url : langUrl + "/business/civil.do" },
+        { name : "사업 실적", url : langUrl + "/business/civil/portfolio-all.do" },
+    ],
+    "기타사업" : [
+        { name : "사업 개요", url : langUrl + "/business/other.do" },
+        { name : "사업 실적", url : langUrl + "/business/other/portfolio-all.do" },
+    ],
+    "투자사업" : [
+        { name : "사업 개요", url : langUrl + "/business/investment.do" },
+        { name : "사업 실적", url : langUrl + "/business/investment/portfolio-all.do" },
+    ],
+};
+
+
+var BreadCrumb = function(){
+    return {
+        common: function () {
+            var _this = this;
+            _html = '';
+
+            _html += '<div class="breadCrumb_home"><a href="/kr/index.do"><span class="ir">홈</span></a></div>'; // home
+
+            _html += '<div class="breadCrumb_depth breadCrumb_depth1">'; // depth1
+            _html += '<ul class="breadCrumb_list">';
+            $(".depth1").each(function (i, item) {
+                _this.dropList($(item), pathArray[0] + "/");
+            });
+            _html += '</ul>';
+            _html += '<button type="button" class="breadCrumb_btn">'+ depthTitle +'<span class="arrow"></span></button>';
+            _html += '</div>';
+
+            _html += '<div class="breadCrumb_depth breadCrumb_depth2">'; // depth2
+            _html += '<ul class="breadCrumb_list">';
+            $(".depth1.current .depth2_list li").each(function (i, v) {
+                _this.dropList($(v), pathArray[1]);
+            });
+            _html += '</ul>';
+            _html += '<button type="button" class="breadCrumb_btn">'+ depthTitle +'<span class="arrow"></span></button>';
+            _html += '</div>';
+
+            if (pathArray[0] == "business" && pathArray[1] != "masterpiece") { // depth3, 사업소개
+                _html += '<div class="breadCrumb_depth breadCrumb_depth3">';
+                _html += '<ul class="breadCrumb_list">';
+                _this.businessDropList();
+                _html += '</div>';
+            }else if (pathArray[0] == "business" && pathArray[1] == "masterpiece") { // depth3, 시업소개 && 마스터피스인 경우
+                _html += '<div class="breadCrumb_depth breadCrumb_depth3 long">';
+                _html += '<ul class="breadCrumb_list">';
+                _this.masterpieceDropList();
+                _html += '</div>';
+            }
+
+            $("#breadCrumbScroll .breadCrumb_inner").html(_html);
+        },
+        dropList: function (target, path) {
+            var txt = $(target).find(">a").text(),
+                href = $(target).find(">a").attr("href"),
+                current = href.indexOf(path) > 0 ? "class='current'" : "";
+
+            _html += "<li " + current + '><a href="' + href + '">' + txt + "</a></li>";
+            if (href.indexOf(path) > 0) {
+                return depthTitle = txt;
+            }
+        },
+        businessDropList: function () {
+            // 마크업 생성
+            for (var i = 0; i < business.list.length; i++) {
+                var _key = Object.keys(business.list[i]);
+                var splitPathArr = pathArray[1].split('.do');
+
+                if (splitPathArr[0] == _key) {
+                    var businessName = business.list[i][_key];
+
+                    for (var j = 0; j < business.area[businessName].length; j++) {
+                       _html += '<li><a href="' + business.area[businessName][j].url + '">' + business.area[businessName][j].name + '</a></li>';
+                    }
+                }
+            }
+            _html += '</ul>';
+            _html += '<button type="button" class="breadCrumb_btn"><span class="txt"></span><span class="arrow"></span></button>';
+
+            // depth list 활성화
+            var patName = location.pathname;
+            var portfolio = 'portfolio';
+            setTimeout(function(){
+                if(patName.indexOf(portfolio) > 0){
+                    $(".breadCrumb_depth3 .breadCrumb_list").find("li").eq(1).addClass("current").siblings().removeClass("current");
+                    $(".breadCrumb_depth3 .breadCrumb_btn .txt").text("사업 실적");
+                }else{
+                    $(".breadCrumb_depth3 .breadCrumb_list").find("li").eq(0).addClass("current").siblings().removeClass("current");
+                    $(".breadCrumb_depth3 .breadCrumb_btn .txt").text("사업 개요");
+                }
+            },100);
+
+        },
+        masterpieceDropList: function () {
+            var _key = Object.keys(business.list[0]);
+            var masterpieceList = [
+                { idx : 0, url : "naerincheon_rest_area"},
+                { idx : 1, url : "dongtan_lynn_straus"},
+                { idx : 2, url : "highway"},
+                { idx : 3, url : "lakecomo"},
+                { idx : 4, url : "newv"}
+            ]
+
+            // 마크업 생성
+            if (pathArray[1] == _key) {
+                var businessName = business.list[0][_key];
+
+                for (var i = 0; i < business.area[businessName].length; i++) {
+                    _html += '<li><a href="' + business.area[businessName][i].url + '">' + business.area[businessName][i].name + '</a></li>';
+                }
+            }
+
+            _html += '</ul>';
+            _html += '<button type="button" class="breadCrumb_btn"><span class="txt"></span><span class="arrow"></span></button>';
+
+            // depth list 활성화
+            var patName = location.pathname;
+            setTimeout(function(){
+                for (var i = 0; i < masterpieceList.length; i++) {
+                    if(patName.indexOf(masterpieceList[i].url) > 0){
+                        var idx = masterpieceList[i].idx;
+                        $(".breadCrumb_depth3.long .breadCrumb_list").find("li").eq(idx).addClass("current").siblings().removeClass("current");
+                    }
+                }
+                var txt = $(".breadCrumb_depth3.long .breadCrumb_list").find("li.current a").text();
+                $(".breadCrumb_depth3.long .breadCrumb_btn .txt").text(txt);
+            },100);
+        },
+        toggle : function(){
+            // breadCrumbBtn 클릭시
+            $(document).on("click",".breadCrumb_depth .breadCrumb_btn", function(){
+                var $breadCrumbBtn = $(this);
+
+                if( $breadCrumbBtn.hasClass("active") ){
+                    $breadCrumbBtn.toggleClass("active");
+                    $breadCrumbBtn.siblings(".breadCrumb_list").toggleClass("open");
+                    return false;
+                };
+
+                // 각 breadCrumb_depth 초기화
+                $(".breadCrumb_btn").removeClass("active");
+                $(".breadCrumb_list").removeClass("open");
+
+                $breadCrumbBtn.addClass("active");
+                $breadCrumbBtn.siblings(".breadCrumb_list").toggleClass("open");
+            });
+        },
+        scrollEvt : function(){
+            var $breadCrumb = $("#breadCrumbScroll");
+            // breadCrumb scrollEvt
+            $(window).on("scroll", function(){
+                var _headerH = $("header").outerHeight(),
+                    _st = $(this).scrollTop();
+
+                // breadCrumb scroll 초기화
+                $(".breadCrumb_btn").removeClass("active");
+                $(".breadCrumb_list").removeClass("open");
+
+                if( _st >= _headerH ) {
+                    if( $("body").attr('data-scroll') === 'down'){
+                        $breadCrumb.attr("data-fixed", "none");
+                    }else if( $("body").attr('data-scroll') === 'up'){
+                        $breadCrumb.attr("data-fixed", "fixed")
+                    }
+                }
+            });
+        },
+        init : function(){
+            this.common();
+            this.toggle();
+            this.scrollEvt();
+        }
+    }
+};
+
+var renderBreadcrumb = BreadCrumb();
+renderBreadcrumb.init();
+

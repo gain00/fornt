@@ -1,0 +1,36 @@
+body {
+  font-family: "Noto Sans KR";
+  background-color: #000;
+}
+.header {
+  height: 60px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+.thumbsList {
+  width: 1200px;
+  margin: 100px auto;
+  display: flex;
+  flex-wrap: wrap;
+  li {
+    image {
+      width: 80px;
+    }
+  }
+}
+.input-box {
+  display: flex;
+  justify-content: center;
+  margin: 80px 0;
+  input {
+    padding: 20px 30px;
+    font-size: 20px;
+    background-color: #fff;
+    border-radius: 100px;
+    height: 40px;
+    border: none;
+  }
+}

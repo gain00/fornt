@@ -1,0 +1,125 @@
+@import "vars";
+@import "mixins";
+
+.header {
+  position: absolute;
+  display: flex;
+
+  justify-content: space-between;
+  width: 100%;
+  height: 80px;
+  overflow: hidden;
+  z-index: 101;
+  transition: all 0.25s ease;
+  &:after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    position: absolute;
+    top: 80px;
+  }
+  &.on {
+    height: 350px;
+    background-color: rgba(255, 255, 255, 1);
+    .list {
+      color: #000;
+    }
+    .logo a {
+      .blue {
+        opacity: 1;
+      }
+      .white {
+        opacity: 0;
+      }
+    }
+  }
+  .logo {
+    height: 80px;
+    padding: 0 50px;
+
+    img {
+      height: 40px;
+      top: 20px;
+      position: absolute;
+      opacity: 0;
+      &.white {
+        opacity: 1;
+      }
+    }
+  }
+  .gnb {
+    .list {
+      display: flex;
+      justify-content: center;
+      li {
+        .depth01 {
+          position: relative;
+          font-size: 20px;
+          font-weight: 300;
+          height: 100px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding-left: 50px;
+          padding-right: 50px;
+          transition: all 0.25s ease;
+        }
+        &:hover .depth01 {
+          color: $main-color;
+        }
+        .depth02 {
+          text-align: center;
+
+          text-align: left;
+          li a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            transition: all 0.25s ease;
+            &:hover {
+              color: $main-color;
+            }
+          }
+        }
+      }
+    }
+  }
+  .util-menu {
+    display: flex;
+    position: relative;
+    align-items: end;
+    height: 300px;
+    width: 250px;
+
+    ul {
+      width: 100%;
+
+      li {
+        &:nth-child(1) {
+          background-color: $main-color;
+        }
+        &:nth-child(2) {
+          background-color: #ca9cb7;
+        }
+        display: flex;
+
+        font-size: $h4;
+        font-weight: 700;
+        margin-top: 30px;
+
+        a {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 20px 0px 20px 20px;
+
+          transition: all 0.25s ease;
+        }
+      }
+    }
+  }
+}

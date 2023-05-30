@@ -1,0 +1,275 @@
+$(document).ready(function() {
+	// 메인 상단 비디오 랜덤 재생
+	var random = Math.floor( Math.random() * $('#introVideo').find('video').length );
+	$('#introVideo').find('video').hide().eq(random).show();
+
+	// 메인 상단 타이틀 모션
+	TweenMax.staggerFromTo($('.video_txt_box').children(), 1, {opacity: 0, y: 100}, {opacity: 1, y: 0},.2);
+
+	var controller = new ScrollMagic.Controller();
+
+	// 타이틀 모션
+	$('.main_section').each(function(idx, item){
+		var titleMotion = TweenMax.staggerFromTo($(item).find('.txtMotion'), 1, {opacity: 0, y: 100}, {opacity: 1, y: 0}, .1);
+		new ScrollMagic.Scene({
+			triggerElement: this,
+			triggerHook: "onEnter",
+			offset: 100,
+			reverse: false // false : 한번만 적용, 기본값 : true
+		})
+		.setTween(titleMotion)
+		.addTo(controller);
+	});
+
+	// quickChange
+	$('[data-scroll="quickChange"]').each(function() {
+		new ScrollMagic.Scene({
+			triggerElement: this,
+			triggerHook: "onEnter",
+			duration: "100%",
+		})
+		.setClassToggle('#quickMenu', 'whiteChage')
+		.addTo(controller);
+	});
+
+	// 스크롤 시 영상중지
+	$('#videoBtn').on('click', function(){
+		$('#introVideo').find('video').trigger('pause');
+	});
+
+	$(window).on('scroll', function() {
+		var scrollT = $(window).scrollTop();
+		var sectionTop = $('.business_wrap').offset().top;
+		var currentT = 0;
+
+		if( scrollT >= sectionTop ){
+			$('#videoBtn').trigger('click');
+		}else if( scrollT == currentT){
+			$('#introVideo').find('video').trigger('play');
+		}
+	});
+
+	// 스크롤 시 노출 모션 : business_wrap
+	var businessWrap = new ScrollMagic.Scene({
+		triggerElement: ".business_wrap",
+		triggerHook: "onEnter",
+		offset: 500,
+		reverse: false // false : 한번만 적용, 기본값 : true
+	})
+	.setTween(
+		new TimelineLite()
+			.fromTo($('.business_wrap .business_main_slide'), .5, {opacity: 0, x: 200},{opacity: 1, x: 0, onComplete: businessSwiper})
+			.fromTo($('.business_wrap .swiper-pagination'), .2, {opacity: 0, y: 80},{opacity: 1, y:0})
+	)
+	.addTo(controller);
+
+
+	// businessSwiper
+	var bullet = ['HOUSING', 'BUILDING', 'INVESTMENT', 'CIVIL', 'OTHER'];
+
+	function businessSwiper(){
+		var businessMainSwiper = new Swiper('.business_main_slide', {
+			effect: "fade",
+			loop: false,
+			speed: 1500,
+			autoplay: false,
+			grabCursor: false,
+			allowTouchMove: false,
+			pagination: {
+				el: '.business_main_slide_wrap .swiper-pagination',
+				clickable: true,
+				renderBullet: function (index, className) {
+					return '<div class="' + className + '">  <div class="ico_wrap">' +'<span class="ico"></span>' + '<span class="txt">' + (bullet[index])+ '</span></div>' + '<span class="bar"></span></div>';
+				}
+			},
+			on: {
+				init: function(){
+					$('#txtList').find('.txt_wrap').eq(0).addClass('on');
+				},
+				slideChange: function(){
+					$(".swiper-pagination-bullet").on('click', function(){
+						return false;
+					});
+					$(".business_main_slide_wrap .swiper-slide").eq(businessMainSwiper.realIndex).addClass('custom_active');
+
+					$('#txtList').find('.txt_wrap').eq(businessMainSwiper.realIndex).addClass('on').siblings().removeClass('on');
+				},
+				transitionEnd: function(){
+					$(".business_main_slide_wrap .swiper-slide").removeClass('custom_active');
+					$(".business_main_slide_wrap .swiper-slide").eq(businessMainSwiper.realIndex).addClass('custom_active');
+
+					$(".swiper-pagination-bullet").off('click');
+				}
+			}
+		});
+	};
+
+	// master_piece_wrap
+	var t1 = new TimelineMax();
+		t1.fromTo('.master_bg_blue_inner', .8, {y: 300, ease: Linear.easeNone}, {y: 0, ease: Linear.easeNone})
+		.staggerTo('.master_list li', .3, {
+			opacity: 1,
+			y: 0
+		}, .3)
+		.fromTo(".circle_wrap", 1, {opacity: 0},{opacity: 1, delay: .5});
+
+	// 스크롤 시 노출 모션 : master_piece_wrap
+	var masterWrap = new ScrollMagic.Scene({
+		triggerElement: ".master_piece_wrap",
+		triggerHook: "onEnter",
+		offset: 0,
+		reverse: false // false : 한번만 적용, 기본값 : true
+	})
+	.setTween(t1)
+	.addTo(controller);
+
+	// master piece bg onload
+	var preload = function (imageArray) {
+		var n = imageArray.length;
+		var img;
+		for (var i = 0; i < n; i++) {
+			img = new Image();
+			img.src = imageArray[i];
+		}
+	};
+
+	var imgPreload = function () {
+		var masterImg = [
+			'/resources/kr/images/main/master_piece_bg_01.jpg',
+			'/resources/kr/images/main/master_piece_bg_02.jpg',
+			'/resources/kr/images/main/master_piece_bg_03.jpg',
+			'/resources/kr/images/main/master_piece_bg_04.jpg',
+			'/resources/kr/images/main/master_piece_bg_05.jpg'
+		];
+
+		preload(masterImg);
+	};
+
+	imgPreload();
+
+	// master list li 클릭시
+	$('.master_list').find('li').on('click', function(){
+		$('.master_bg_blue').css({opacity: 0, visibility: 'hidden'});
+		$('.circle_wrap').hide();
+
+		if(!$(this).hasClass("active")){
+			$(this).addClass('active').siblings().removeClass('active');
+			$(this).removeClass('hide').siblings().addClass('hide');
+		}
+
+		var idx = $(this).index();
+		$('#bgList').find('li').eq(idx).fadeIn(300).siblings().fadeOut();
+	});
+
+	// 스크롤 시 노출 모션 : history bg
+	var tBg = new TimelineLite();
+	tBg.fromTo($('.history_people_wrap .history_bg span'), 2.6, {rotation: 7, scale: 1.2},{rotation: -7, scale: .8})
+
+	var historyWrap = new ScrollMagic.Scene({
+		triggerElement: ".history_people_wrap",
+		triggerHook: "onEnter",
+		offset: 500,
+		reverse: false // false : 한번만 적용, 기본값 : true
+	})
+	.setTween(tBg)
+	.addTo(controller);
+
+	// 스크롤 시 노출 모션 : people
+	var t2 = new TimelineLite(), circleMotionWrap = $('.people_area .circle_motion_wrap');
+		t2.fromTo($('.people_slide .slide1 .txt_area'), .45, {opacity: 0, x: -100},{opacity: 1, x: 0})
+		.fromTo($('.people_slide .slide1 .img'), .45, {opacity: 0, x: 100},{opacity: 1, x: 0 })
+		.fromTo(circleMotionWrap, 1, {opacity: 0}, {opacity: 1, onComplete: circleActive })
+		.staggerTo(circleMotionWrap.find('.circle_item .circle_box'), .5, {
+			opacity: 1,
+			delay: .5
+		}, .3)
+
+	// 스크롤 시 노출 모션 : circle active
+	function circleActive(){
+		$(".circle_motion_wrap").find(">div").addClass("on");
+	}
+
+	var peopleSwiper = new Swiper(".people_slide", {
+		loop: true,
+		speed: 1200,
+		slidesPerView: 1,
+		autoplay: {
+			delay: 1000,
+		},
+		pagination: {
+			el: '.people_slide_area .swiper-pagination',
+			clickable: true,
+		},
+		on:{
+			init: function(){
+				$('.people_slide .slide1 .txt_area').css({opacity: 0, transform: 'translateX(-100px)'});
+				$('.people_slide .slide1 .img').css({opacity: 0, transform: 'translateX(100px)'});
+			},
+			transitionEnd: function(){
+				$('.people_slide .slide1 .txt_area').css({opacity: 1, transform: 'translateX(0)'});
+				$('.people_slide .slide1 .img').css({opacity: 1, transform: 'translateX(0)'});
+			}
+		}
+	});
+
+	$(window).on('scroll', function() {
+		var scrollT = $(window).scrollTop();
+		// var secH1 = $('.history_area').offset().top;
+		var secH1 = $('.master_piece_wrap').offset().top;
+		var secH2 = $('.people_area').offset().top;
+
+		if( scrollT >= secH1 && scrollT < secH2 ){
+			peopleSwiper.autoplay.start();
+		}else{
+			peopleSwiper.autoplay.stop();
+		}
+	}).trigger("scroll");
+
+
+	// 스크롤 시 노출 모션 : people_wrap
+	var peopleWrap = new ScrollMagic.Scene({
+		triggerElement: ".people_area",
+		triggerHook: "onEnter",
+		offset: 400,
+		reverse: false // false : 한번만 적용, 기본값 : true
+	})
+	.setTween(t2)
+	.addTo(controller);
+
+
+	// 스크롤 시 노출 모션 : news_wrap
+	var t3 = new TimelineMax();
+	t3.staggerTo('[data-scroll="scrollMotion"]', .3, {
+		opacity: 1,
+		y: 0
+	}, .4);
+
+	var newsWrap = new ScrollMagic.Scene({
+		triggerElement: ".news_wrap",
+		triggerHook: "onEnter",
+		offset: 400,
+		reverse: false // false : 한번만 적용, 기본값 : true
+	})
+	.setTween(t3)
+	.addTo(controller);
+
+
+	// snsTabList
+	var snsTab = $('#snsTabList');
+	snsTab.find('li').each(function(index, item){
+		$(item).find('>a').on('click', function(){
+			var url = $(item).attr('data-url');
+			if( $(item).hasClass('left') ){
+				$(item).parent(snsTab).addClass('left');
+				$(item).parent(snsTab).removeClass('right');
+			}else {
+				$(item).parent(snsTab).removeClass('left');
+				$(item).parent(snsTab).addClass('right');
+			}
+
+			$(item).addClass('active').siblings().removeClass('active');
+			$('.cont_box').eq(index).addClass('on').siblings().removeClass('on');
+			$('#snsTabMore').attr('href',url);
+		});
+	});
+});

@@ -1,0 +1,95 @@
+@import "vars";
+@import "mixins";
+
+.video {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+.video-m {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  width: 100%;
+  top: 50%;
+
+  text-align: center;
+  flex-direction: column;
+  .span1 {
+    font-size: $h1;
+    font-weight: 700;
+  }
+  .span2 {
+    font-size: $h4;
+    font-weight: 700;
+  }
+}
+.business {
+  position: relative;
+
+  .container {
+    position: relative;
+
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .text-box {
+      .business-image {
+        position: absolute;
+
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+      .tb:first-child {
+        margin-top: 200px;
+      }
+      .tb {
+        padding-top: 5px;
+        display: flex;
+        justify-content: right;
+        width: 80%;
+        img {
+          padding: 0 20px;
+        }
+      }
+      span {
+        top: 50%;
+        left: 50%;
+        display: flex;
+        flex-direction: column;
+        font-size: $h2;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 20px;
+        text-align: right;
+      }
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 30%;
+      color: gray;
+    }
+    .img-box {
+      width: 70%;
+
+      @for $i from 1 through 5 {
+        .img-txt#{$i} {
+          position: absolute;
+          opacity: 0;
+        }
+      }
+
+      .on {
+        position: absolute;
+        opacity: 1;
+        z-index: 1;
+        transition: all 0.5s ease;
+      }
+    }
+  }
+}
