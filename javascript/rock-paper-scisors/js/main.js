@@ -21,7 +21,7 @@ humanList.forEach((item, idx) => {
   });
 });
 
-const makeRandom = function () {
+const makeRandom = () => {
   computerList[0].style.display = "none";
   computerList[1].style.display = "none";
   computerList[2].style.display = "none";
